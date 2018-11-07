@@ -118,7 +118,7 @@ def print_coauthorship():
     y_data = []
 
     citation_graph = load_graph()
-    distribution = normalise_distribution(get_brilliance_distribution(citation_graph), len(citation_graph))
+    distribution = normalise_distribution(get_brilliance_distribution(citation_graph), 1559)
 
     for degree in distribution:
         x_data += [degree]
