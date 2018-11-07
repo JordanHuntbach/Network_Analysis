@@ -7,19 +7,14 @@ def load_graph():
     # TODO: This doesn't load the vertices with no co-authors. Load them first, then fill in the blanks.
 
     graph = {}
-    nodes = 0
+
+    for i in range(1, 1560):
+        graph[i] = set()
 
     for line in txt:
         neighbors = line.strip(' ').split(' ')
         vertex1 = int(neighbors[0])
         vertex2 = int(neighbors[1])
-
-        if vertex1 not in graph:
-            graph[vertex1] = set([])
-            nodes += 1
-        if vertex2 not in graph:
-            graph[vertex2] = set([])
-            nodes += 1
 
         if vertex2 not in graph[vertex1] and vertex1 != vertex2:
             graph[vertex1].add(vertex2)
