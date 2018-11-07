@@ -64,7 +64,7 @@ def approximate_brilliance(graph):
     to_remove = set()
     while True:
         min_degree = 2000
-        min_vertex = 0
+        min_vertex = None
         for vertex in graph:
             graph[vertex] = graph[vertex].difference(to_remove)
         for vertex in graph:
@@ -74,7 +74,7 @@ def approximate_brilliance(graph):
                 min_vertex = vertex
                 if degree <= 1:
                     break
-        if min_vertex != 0:
+        if min_vertex is not None:
             to_remove = set()
             independent.add(min_vertex)
             for vertex in graph[min_vertex]:
@@ -133,7 +133,7 @@ def print_coauthorship():
     plt.xlabel('Brilliance')
     plt.ylabel('Normalized Rate')
     plt.title('Brilliance Distribution of \'coauthorship.txt\'')
-    plt.plot(x_data, y_data, marker='.', linestyle='None', color='b')
+    plt.plot(x_data, y_data, marker='.', linestyle='None', color='black', s=10)
     plt.savefig('question2coauthorship.png')
 
 
@@ -143,7 +143,7 @@ def print_ring_group():
     x_data = []
     y_data = []
 
-    graph = make_ring_group(16, 100, 0.02, 0.01)
+    graph = make_ring_group(16, 100, 0.06, 0.03)
     distribution = normalise_distribution(get_brilliance_distribution(graph), len(graph))
 
     for degree in distribution:
@@ -154,7 +154,7 @@ def print_ring_group():
     plt.xlabel('Brilliance')
     plt.ylabel('Normalized Rate')
     plt.title('Brilliance Distribution of Ring Group Graph')
-    plt.plot(x_data, y_data, marker='.', linestyle='None', color='b')
+    plt.plot(x_data, y_data, marker='.', markersize=5, linestyle='None', color='black')
     plt.savefig('question2ring.png')
 
 

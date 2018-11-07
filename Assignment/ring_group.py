@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 
 def make_ring_group(m, k, p, q):
     vertices = m * k
+    edges = 0
 
     # Initialize empty graph
     graph = {}
@@ -12,18 +13,21 @@ def make_ring_group(m, k, p, q):
 
     # Consider each vertex, making edges when necessary
     for u in range(vertices):
-        u_group = u // vertices
-        for v in range(u, vertices):
-            v_group = v // vertices
+        u_group = u // k
+        for v in range(u + 1, vertices):
+            v_group = v // k
             probability = random.random()
-            if u_group == v_group or (v - u == 1) or (u == 0 and v == m*k):
+            if u_group == v_group or (v_group - u_group == 1) or (u_group == 0 and v_group == m - 1):
                 if probability <= p:
+                    edges += 1
                     graph[u].add(v)
                     graph[v].add(u)
             else:
                 if probability <= q:
+                    edges += 1
                     graph[u].add(v)
                     graph[v].add(u)
+    print("Made a ring group graph with", vertices, "vertices and", edges, "edges.")
     return graph
 
 
@@ -107,7 +111,7 @@ def print_graph():
     plt.xlabel('Degree')
     plt.ylabel('Normalized Rate')
     plt.title('Degree Distribution of Ring Group Graph')
-    plt.plot(x_data, y_data, marker='.', linestyle='None', color='b')
+    plt.plot(x_data, y_data, marker='.', markersize=5, linestyle='None', color='black')
     plt.savefig('question1.png')
 
 
