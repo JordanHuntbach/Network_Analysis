@@ -133,7 +133,7 @@ def print_coauthorship():
     plt.xlabel('Brilliance')
     plt.ylabel('Normalized Rate')
     plt.title('Brilliance Distribution of \'coauthorship.txt\'')
-    plt.plot(x_data, y_data, marker='.', linestyle='None', color='black', s=10)
+    plt.plot(x_data, y_data, marker='.', markersize=5, linestyle='None', color='black')
     plt.savefig('question2coauthorship.png')
 
 
@@ -159,4 +159,4 @@ def print_ring_group():
 
 
 if __name__ == '__main__':
-    print_ring_group()
+    print_coauthorship()
