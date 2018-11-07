@@ -84,3 +84,8 @@ def make_pa_graph(total_nodes, out_degree):
     for vertex in range(out_degree, total_nodes):
         pa_graph[vertex] = trial.run_trial(out_degree)
     return pa_graph
+
+
+if __name__ == '__main__':
+    graph = make_pa_graph(10, 5)
+    pass

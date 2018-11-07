@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import random
 
 
 def load_graph():
@@ -153,5 +154,58 @@ def print_ring_group():
     plt.savefig('question2ring.png')
 
 
+def make_pa_graph(vertices, degree):
+    graph = {}
+    prob_list = []
+    edges = 0
+
+    for i in range(degree):
+        graph[i] = set()
+
+    for i in range(degree):
+        for j in range(i, degree):
+            if i != j:
+                prob_list.append(i)
+                prob_list.append(j)
+                graph[i].add(j)
+                graph[j].add(i)
+                edges += 1
+
+    for vertex in range(degree, vertices):
+        graph[vertex] = set()
+        to_add = set()
+        for i in range(degree):
+            choice = random.choice(prob_list)
+            to_add.add(choice)
+        for neighbour in to_add:
+            prob_list.append(vertex)
+            prob_list.append(neighbour)
+            graph[vertex].add(neighbour)
+            graph[neighbour].add(vertex)
+            edges += 1
+
+    print("Made a PA graph with", vertices, "vertices and", edges, "edges.")
+    return graph
+
+
+def print_pa_graph():
+    x_data = []
+    y_data = []
+
+    graph = make_pa_graph(1600, 30)
+    distribution = normalise_distribution(get_brilliance_distribution(graph), len(graph))
+
+    for degree in distribution:
+        x_data += [degree]
+        y_data += [distribution[degree]]
+
+    plt.clf()
+    plt.xlabel('Brilliance')
+    plt.ylabel('Normalized Rate')
+    plt.title('Brilliance Distribution of PA Graph')
+    plt.plot(x_data, y_data, marker='.', markersize=5, linestyle='None', color='black')
+    plt.savefig('question2pa.png')
+
+
 if __name__ == '__main__':
-    print_coauthorship()
+    print_pa_graph()
