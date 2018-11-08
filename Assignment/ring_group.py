@@ -2,6 +2,7 @@ import random
 import matplotlib.pyplot as plt
 import queue
 
+
 def make_ring_group(m, k, p, q):
     vertices = m * k
     edges = 0
@@ -160,12 +161,12 @@ def print_graph_diameter():
     plt.clf()
     plt.xlabel('Probability p')
     plt.ylabel('Diameter')
-    plt.title('Diameter of Ring Group Graph with m=40, k=100')
+    plt.title('Diameter of Ring Group Graph with m=20, k=50')
 
     y_data = []
     for p in [x / 100 for x in range(0, 26)]:
         print("p =", p)
-        graph = make_ring_group(40, 100, p, 0.002)
+        graph = make_ring_group(20, 50, p, 0.002)
         diameter = find_diameter(graph)
         x_data += [p]
         y_data += [diameter]
@@ -174,7 +175,7 @@ def print_graph_diameter():
     y_data = []
     for p in [x / 100 for x in range(0, 26)]:
         print("p =", p)
-        graph = make_ring_group(40, 100, p, 0.005)
+        graph = make_ring_group(20, 50, p, 0.005)
         diameter = find_diameter(graph)
         y_data += [diameter]
     plt.plot(x_data, y_data, marker='x', markersize=7, linestyle='None', color='g', label="q = 0.005")
@@ -182,7 +183,7 @@ def print_graph_diameter():
     y_data = []
     for p in [x / 100 for x in range(0, 26)]:
         print("p =", p)
-        graph = make_ring_group(40, 100, p, 0.008)
+        graph = make_ring_group(20, 50, p, 0.008)
         diameter = find_diameter(graph)
         y_data += [diameter]
     plt.plot(x_data, y_data, marker='.', markersize=5, linestyle='None', color='r', label="q = 0.008")
