@@ -1,6 +1,6 @@
 import random
 import matplotlib.pyplot as plt
-
+import queue
 
 def make_ring_group(m, k, p, q):
     vertices = m * k
@@ -65,9 +65,9 @@ def normalise(distribution, total):
 
 
 def get_average_distribution(n):
-    m = 20
-    k = 50
-    p = 0.3
+    m = 100
+    k = 20
+    p = 0.26
     q = 0.5 - p
 
     cumulative_distribution = {}
@@ -101,19 +101,95 @@ def print_graph():
     x_data = []
     y_data = []
 
-    averages = get_average_distribution(100)
+    averages = get_average_distribution(250)
 
     for degree in averages:
         x_data += [degree]
         y_data += [averages[degree]]
 
+    parameters = "m = 100\nk = 20\np = 0.26\nq = 0.24"
+
     plt.clf()
     plt.xlabel('Degree')
     plt.ylabel('Normalized Rate')
     plt.title('Degree Distribution of Ring Group Graph')
-    plt.plot(x_data, y_data, marker='.', markersize=5, linestyle='None', color='black')
+    plt.plot(x_data, y_data, marker='.', markersize=5, linestyle='None', color='black', label=parameters)
+    plt.legend(loc="upper right")
     plt.savefig('question1.png')
 
 
+def find_diameter(graph):
+    print("Calculating diameter...")
+    diameter = 0
+    for vertex in graph:
+        distance = max_dist(graph, vertex)
+        if distance > diameter:
+            diameter = distance
+    print("Diameter =", diameter)
+    return diameter
+
+
+def max_dist(graph, source):  # From the lectures
+    """finds the distance (the length of the shortest path) from the source to
+    every other vertex in the same component using breadth-first search, and
+    returns the value of the largest distance found"""
+    q = queue.Queue()
+    found = {}
+    distance = {}
+    for vertex in graph:                                        # set up arrays
+        found[vertex] = 0                                       # to record whether a vertex has been discovered
+        distance[vertex] = -1                                   # and its distance from the source
+    max_distance = 0
+    found[source] = 1                                           # initialize arrays with values for the source
+    distance[source] = 0
+    q.put(source)                                               # put the source in the queue
+    while not q.empty():
+        current = q.get()                                       # process the vertex at the front of the queue
+        for neighbour in graph[current]:                        # look at its neighbours
+            if found[neighbour] == 0:                           # if undiscovered, update arrays and add to the queue
+                found[neighbour] = 1
+                distance[neighbour] = distance[current] + 1
+                max_distance = distance[neighbour]
+                q.put(neighbour)
+    return max_distance
+
+
+def print_graph_diameter():
+    x_data = []
+
+    plt.clf()
+    plt.xlabel('Probability p')
+    plt.ylabel('Diameter')
+    plt.title('Diameter of Ring Group Graph with m=40, k=100')
+
+    y_data = []
+    for p in [x / 100 for x in range(0, 26)]:
+        print("p =", p)
+        graph = make_ring_group(40, 100, p, 0.002)
+        diameter = find_diameter(graph)
+        x_data += [p]
+        y_data += [diameter]
+    plt.plot(x_data, y_data, marker='+', markersize=7, linestyle='None', color='b', label="q = 0.002")
+
+    y_data = []
+    for p in [x / 100 for x in range(0, 26)]:
+        print("p =", p)
+        graph = make_ring_group(40, 100, p, 0.005)
+        diameter = find_diameter(graph)
+        y_data += [diameter]
+    plt.plot(x_data, y_data, marker='x', markersize=7, linestyle='None', color='g', label="q = 0.005")
+
+    y_data = []
+    for p in [x / 100 for x in range(0, 26)]:
+        print("p =", p)
+        graph = make_ring_group(40, 100, p, 0.008)
+        diameter = find_diameter(graph)
+        y_data += [diameter]
+    plt.plot(x_data, y_data, marker='.', markersize=5, linestyle='None', color='r', label="q = 0.008")
+
+    plt.legend(loc="upper right")
+    plt.savefig('question1diameter.png')
+
+
 if __name__ == '__main__':
-    print_graph()
+    print_graph_diameter()

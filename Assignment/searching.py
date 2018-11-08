@@ -27,12 +27,7 @@ def random_search(graph, start, end):
     while True:
         if current == end:
             return queries
-
-        neighbours = graph[current]
-        n = len(neighbours)
-        queried = []
-
-        current = random.choice(neighbours)
+        current = random.choice(graph[current])
         queries += 1
 
 
