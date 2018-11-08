@@ -32,18 +32,6 @@ def random_search(graph, start, end):
         n = len(neighbours)
         queried = []
 
-        # n = 0 gave 1304, 3 game 1268, 5 gave 1302, 10 gave 846, 20 gave 124. More experimentation needed perhaps.
-        # if n > 0:
-        #     while len(queried) < n:
-        #         selection = random.choice(range(n))
-        #         while selection in queried:
-        #             selection = random.choice(range(n))
-        #         queried.append(selection)
-        #         queries += 1
-        #         if selection == end:
-        #             return queries
-        #     current = random.choice(neighbours)
-        # else:
         current = random.choice(neighbours)
         queries += 1
 
@@ -65,7 +53,7 @@ def print_random_graph():
 
     distribution = {}
 
-    for i in range(100):
+    for i in range(250):
         random_graph = make_random_graph(100, 0.1)
         avg_search_time = average_search_time_random(random_graph)
         print("Search time for graph", i, "is", avg_search_time)
@@ -188,4 +176,4 @@ def print_ring_graph():
 
 
 if __name__ == '__main__':
-    print_ring_graph()
+    print_random_graph()
