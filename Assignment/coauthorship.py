@@ -11,6 +11,7 @@ def load_graph():
     for i in range(1, 1560):
         graph[i] = set()
 
+    edges = 0
     # Read file and fill in edges
     for line in txt:
         neighbors = line.strip(' ').split(' ')
@@ -18,9 +19,11 @@ def load_graph():
         vertex2 = int(neighbors[1])
 
         if vertex2 not in graph[vertex1] and vertex1 != vertex2:
+            edges += 1
             graph[vertex1].add(vertex2)
             graph[vertex2].add(vertex1)
 
+    print("Loaded coauthorship graph with 1559 vertices and", edges, "edges.")
     return graph
 
 
@@ -46,17 +49,16 @@ def recursion_boi(graph, current_best, remaining_neighbours, locked_in, depth):
     if len(locked_in) >= len(remaining_neighbours) - 1:
         return remaining_neighbours
     for neighbour in remaining_neighbours.difference(locked_in):
-        if neighbour not in locked_in:
-            new_locked_in = set(locked_in)
-            new_locked_in.add(neighbour)
+        new_locked_in = set(locked_in)
+        new_locked_in.add(neighbour)
 
-            to_remove = graph[neighbour]
-            new_remaining_members = remaining_neighbours.difference(to_remove)
+        to_remove = graph[neighbour]
+        new_remaining_members = remaining_neighbours.difference(to_remove)
 
-            if len(new_remaining_members) > len(current_best):
-                recursed = recursion_boi(graph, current_best, new_remaining_members, new_locked_in, depth + 1)
-                if len(recursed) > len(current_best):
-                    current_best = recursed
+        if len(new_remaining_members) > len(current_best):
+            recursed = recursion_boi(graph, current_best, new_remaining_members, new_locked_in, depth + 1)
+            if len(recursed) > len(current_best):
+                current_best = recursed
     return current_best
 
 
@@ -152,7 +154,7 @@ def print_ring_group():
     x_data = []
     y_data = []
 
-    graph = make_ring_group(16, 100, 0.06, 0.03)
+    graph = make_ring_group(16, 97, 0.047, 0.030)
     distribution = normalise_distribution(get_brilliance_distribution(graph), len(graph))
 
     for degree in distribution:
@@ -205,7 +207,7 @@ def print_pa_graph():
     x_data = []
     y_data = []
 
-    graph = make_pa_graph(1600, 30)
+    graph = make_pa_graph(1559, 27)
     distribution = normalise_distribution(get_brilliance_distribution(graph), len(graph))
 
     for degree in distribution:

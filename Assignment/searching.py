@@ -26,23 +26,24 @@ def random_search(graph, start, end):
     queries = 0
     current = start
     while True:
-        # neighbours = graph[current]
-        # degree = len(neighbours)
+        neighbours = graph[current]
+        degree = len(neighbours)
         if current == end:
             return queries
-        # if degree > 12:
-        #     queried = []
-        #     while len(queried) < degree:
-        #         options = list(set(neighbours).difference(set(queried)))
-        #         selection = random.choice(options)
-        #         queried.append(selection)
-        #         queries += 1
-        #         if selection == end:
-        #             return queries
-        #     current = random.choice(queried)
-        # else:
-        current = random.choice(graph[current])
-        queries += 1
+        if degree > 13:
+            queried = []
+            while len(queried) < degree:
+                options = set(neighbours).difference(set(queried))
+                options = list(options)
+                selection = random.choice(options)
+                queried.append(selection)
+                queries += 1
+                if selection == end:
+                    return queries
+            current = random.choice(queried)
+        else:
+            current = random.choice(graph[current])
+            queries += 1
 
 
 def average_search_time_random(graph):
@@ -53,9 +54,13 @@ def average_search_time_random(graph):
     # Calculate the search time for each pair of vertices and average the result
     for start in range(1, vertices + 1):
         for target in range(start + 1, vertices + 1):
-            search_time = random_search(graph, start, target)
-            total += search_time
-            pairs += 1
+            try:
+                search_time = random_search(graph, start, target)
+                total += search_time
+                pairs += 1
+            except KeyboardInterrupt:
+                print("nice")
+                pass
             # print("Search time from", start, "to", target, "is", search_time)
     return total // pairs
 
@@ -67,7 +72,7 @@ def print_random_graph():
     distribution = {}
 
     # Create n graphs, getting their average search time and adding the result to the distribution
-    graphs = 500
+    graphs = 250
     for i in range(graphs):
         random_graph = make_random_graph(100, 0.1)
         avg_search_time = average_search_time_random(random_graph)
@@ -203,4 +208,4 @@ def print_ring_graph():
 
 
 if __name__ == '__main__':
-    print_ring_graph()
+    print_random_graph()
