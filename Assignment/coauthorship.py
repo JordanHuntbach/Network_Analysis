@@ -5,13 +5,13 @@ import random
 def load_graph():
 
     txt = open("coauthorship.txt")
-    # TODO: This doesn't load the vertices with no co-authors. Load them first, then fill in the blanks.
 
+    # Initialise empty graph
     graph = {}
-
     for i in range(1, 1560):
         graph[i] = set()
 
+    # Read file and fill in edges
     for line in txt:
         neighbors = line.strip(' ').split(' ')
         vertex1 = int(neighbors[0])
@@ -28,9 +28,13 @@ def neighbours_subgraph(graph, node):
     subgraph = {}
     independent = set()
 
+    # Get neighbours of the target
     neighbours = graph[node]
+
+    # Create subgraph containing only the neighbours
     for neighbour in neighbours:
         subgraph[neighbour] = graph[neighbour].intersection(neighbours)
+        # Add any neighbours that are already independent to this set
         if subgraph[neighbour] == set():
             independent.add(neighbour)
 
@@ -38,6 +42,7 @@ def neighbours_subgraph(graph, node):
 
 
 def recursion_boi(graph, current_best, remaining_neighbours, locked_in, depth):
+    # This function is used to calculate the brilliance of a vertex from its subgraph
     if len(locked_in) >= len(remaining_neighbours) - 1:
         return remaining_neighbours
     for neighbour in remaining_neighbours.difference(locked_in):
@@ -56,6 +61,8 @@ def recursion_boi(graph, current_best, remaining_neighbours, locked_in, depth):
 
 
 def approximate_brilliance(graph):
+    # This function keeps removing neighbours connected to the vertex with the smallest degree, until the whole set of
+    # vertices is independent
     independent = set()
     to_remove = set()
     while True:
@@ -87,12 +94,16 @@ def get_brilliance_distribution(graph):
     for vertex in graph:
         count += 1
         print(count, "/", len(graph))
+
+        # Get the subgraph consisting of just neighbour to the vertex
         subgraph, independent = neighbours_subgraph(graph, vertex)
         neighbours = graph[vertex]
         neighbour_count = len(neighbours)
         independent_count = len(independent)
         print("Vertex", vertex, "has", neighbour_count, "neighbours.")
         print(independent_count, "of them are immediately independent.")
+
+        # If the graph is simple, calculate the brilliance, otherwise estimate it
         if neighbour_count - independent_count < 20:
             print("Calculating brilliance for vertex", vertex)
             brilliance = len(recursion_boi(subgraph, set(), neighbours, independent, 0))
@@ -100,6 +111,8 @@ def get_brilliance_distribution(graph):
             print("Approximating brilliance for vertex", vertex)
             brilliance = approximate_brilliance(subgraph)
         print("Brilliance:", brilliance)
+
+        # Add the brilliance to the distribution
         if brilliance in brilliances:
             brilliances[brilliance] += 1
         else:

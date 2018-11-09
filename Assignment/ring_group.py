@@ -130,24 +130,24 @@ def find_diameter(graph):
     return diameter
 
 
-def max_dist(graph, source):  # From the lectures
-    """finds the distance (the length of the shortest path) from the source to
+def max_dist(graph, source):  # Taken from the lectures
+    """Finds the distance (the length of the shortest path) from the source to
     every other vertex in the same component using breadth-first search, and
-    returns the value of the largest distance found"""
+    returns the value of the largest distance found."""
     q = queue.Queue()
     found = {}
     distance = {}
-    for vertex in graph:                                        # set up arrays
-        found[vertex] = 0                                       # to record whether a vertex has been discovered
+    for vertex in graph:                                        # Set up arrays
+        found[vertex] = 0                                       # To record whether a vertex has been discovered
         distance[vertex] = -1                                   # and its distance from the source
     max_distance = 0
-    found[source] = 1                                           # initialize arrays with values for the source
+    found[source] = 1                                           # Initialize arrays with values for the source
     distance[source] = 0
-    q.put(source)                                               # put the source in the queue
+    q.put(source)                                               # Put the source in the queue
     while not q.empty():
-        current = q.get()                                       # process the vertex at the front of the queue
-        for neighbour in graph[current]:                        # look at its neighbours
-            if found[neighbour] == 0:                           # if undiscovered, update arrays and add to the queue
+        current = q.get()                                       # Process the vertex at the front of the queue
+        for neighbour in graph[current]:                        # Look at its neighbours
+            if found[neighbour] == 0:                           # If undiscovered, update arrays and add to the queue
                 found[neighbour] = 1
                 distance[neighbour] = distance[current] + 1
                 max_distance = distance[neighbour]
